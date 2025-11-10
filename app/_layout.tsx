@@ -9,8 +9,8 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+    // Catch any errors thrown by the Layout component.
+    ErrorBoundary
 } from 'expo-router';
 
 export const unstable_settings = {
@@ -52,8 +52,12 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="MyProfileScreen" options={{ presentation: 'card', headerShown: true }} />
+        <Stack.Screen name="MyGoalsScreen" options={{ title: 'My Goals', presentation: 'card' }} />
+        <Stack.Screen name="ScanResultScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="AddFoodScreen" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
 }
+
