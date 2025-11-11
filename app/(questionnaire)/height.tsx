@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function HeightScreen() {
-  const [height, setHeight] = useState('');
+  const { answers, updateAnswer } = useQuestionnaire();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,8 +17,8 @@ export default function HeightScreen() {
         <View style={styles.inputGroup}>
           <TextInput
             placeholder="162.0"
-            value={height}
-            onChangeText={setHeight}
+            value={answers.height || ''}
+            onChangeText={(text) => updateAnswer('height', text)}
             keyboardType="numeric"
             style={styles.input}
           />
@@ -28,7 +29,7 @@ export default function HeightScreen() {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             title="Continue"
-            disabled={!height}
+            disabled={!answers.height}
             onPress={() => router.push('/(questionnaire)/current-weight')}
           />
         </View>

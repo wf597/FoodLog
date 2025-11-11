@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function GoalWeightScreen() {
-  const [goalWeight, setGoalWeight] = useState('');
+  const { answers, updateAnswer } = useQuestionnaire();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,8 +17,8 @@ export default function GoalWeightScreen() {
         <View style={styles.inputGroup}>
           <TextInput
             placeholder="56.0"
-            value={goalWeight}
-            onChangeText={setGoalWeight}
+            value={answers.goalWeight || ''}
+            onChangeText={(text) => updateAnswer('goalWeight', text)}
             keyboardType="numeric"
             style={styles.input}
           />
@@ -28,7 +29,7 @@ export default function GoalWeightScreen() {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             title="Continue"
-            disabled={!goalWeight}
+            disabled={!answers.goalWeight}
             onPress={() => router.push('/(questionnaire)/activity-level')}
           />
         </View>

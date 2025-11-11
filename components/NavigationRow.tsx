@@ -5,14 +5,18 @@ import Card from './Card';
 interface NavigationRowProps {
   title: string;
   onPress: () => void;
+  subtitle?: string;
 }
 
-export default function NavigationRow({ title, onPress }: NavigationRowProps) {
+export default function NavigationRow({ title, onPress, subtitle }: NavigationRowProps) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <Card>
         <View style={styles.container}>
-          <Text style={styles.title}>{title}</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{title}</Text>
+            {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+          </View>
           <Text style={styles.arrow}>{'>'}</Text>
         </View>
       </Card>
@@ -26,8 +30,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  textContainer: {
+    flex: 1,
+  },
   title: {
     fontSize: 16,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: 'gray',
+    marginTop: 4,
   },
   arrow: {
     fontSize: 16,

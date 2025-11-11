@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function GenderScreen() {
-  const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const { answers, updateAnswer } = useQuestionnaire();
 
   const genders = ['Female', 'Male', 'Non binary'];
 
@@ -21,7 +22,7 @@ export default function GenderScreen() {
           showsVerticalScrollIndicator={false}
         >
           {genders.map((item, index) => {
-            const isSelected = item === selectedGender;
+            const isSelected = item === answers.gender;
             return (
               <TouchableOpacity
                 key={index}
@@ -29,7 +30,7 @@ export default function GenderScreen() {
                   styles.optionButton,
                   isSelected && styles.optionButtonSelected,
                 ]}
-                onPress={() => setSelectedGender(item)}
+                onPress={() => updateAnswer('gender', item)}
               >
                 <Text
                   style={[
@@ -48,7 +49,7 @@ export default function GenderScreen() {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             title="Continue"
-            disabled={selectedGender === null}
+            disabled={answers.gender === null}
             onPress={() => router.push('/(questionnaire)/birth-date')}
           />
         </View>

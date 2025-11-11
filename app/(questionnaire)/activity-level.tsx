@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function ActivityLevelScreen() {
-  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+  const { answers, updateAnswer } = useQuestionnaire();
 
   const activities = ['Sedentary', 'Lightly active', 'Active'];
 
@@ -21,7 +22,7 @@ export default function ActivityLevelScreen() {
           showsVerticalScrollIndicator={false}
         >
           {activities.map((item, index) => {
-            const isSelected = item === selectedActivity;
+            const isSelected = item === answers.activityLevel;
             return (
               <TouchableOpacity
                 key={index}
@@ -29,7 +30,7 @@ export default function ActivityLevelScreen() {
                   styles.optionButton,
                   isSelected && styles.optionButtonSelected,
                 ]}
-                onPress={() => setSelectedActivity(item)}
+                onPress={() => updateAnswer('activityLevel', item)}
               >
                 <Text
                   style={[
@@ -48,7 +49,7 @@ export default function ActivityLevelScreen() {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             title="Continue"
-            disabled={selectedActivity === null}
+            disabled={answers.activityLevel === null}
             onPress={() => router.replace('/(tabs)/home')}
           />
         </View>

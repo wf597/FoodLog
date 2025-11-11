@@ -4,6 +4,7 @@ import { Stack, router } from 'expo-router';
 import ScreenContainer from '@/components/ScreenContainer';
 import StyledTextInput from '@/components/StyledTextInput';
 import PrimaryButton from '@/components/PrimaryButton';
+import SocialLoginButton from '@/components/SocialLoginButton';
 
 export default function SignUpScreen() {
   const [fullName, setFullName] = useState('');
@@ -69,9 +70,9 @@ export default function SignUpScreen() {
             <View style={styles.orLine} />
           </View>
 
-          {/* Social Login Placeholders */}
-          <View style={styles.socialButtonPlaceholder} />
-          <View style={styles.socialButtonPlaceholder} />
+          {/* Social Login Buttons */}
+          <SocialLoginButton title="Continue with Google" iconName="logo-google" onPress={() => {}} />
+          <SocialLoginButton title="Continue with Apple" iconName="logo-apple" onPress={() => {}} />
 
           {/* Sign Up Button */}
           <View style={styles.buttonContainer}>
@@ -122,13 +123,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 14,
     color: 'gray',
-  },
-  socialButtonPlaceholder: {
-    height: 50,
-    width: '100%',
-    backgroundColor: '#F0F0F0',
-    borderRadius: 12,
-    marginVertical: 8,
   },
   buttonContainer: {
     marginTop: 16,

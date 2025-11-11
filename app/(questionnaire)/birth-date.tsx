@@ -1,57 +1,64 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import { router } from 'expo-router';
-import StyledTextInput from '@/components/StyledTextInput';
 import PrimaryButton from '@/components/PrimaryButton';
+import StyledTextInput from '@/components/StyledTextInput';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
+import { router } from 'expo-router';
+import React from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BirthDateScreen() {
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [day, setDay] = useState('');
+  const { answers, updateAnswer } = useQuestionnaire();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        {/* Question Text */}
-        <Text style={styles.question}>What's your date of birth?</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.content}>
+            {/* Question Text */}
+            <Text style={styles.question}>What's your date of birth?</Text>
 
-        {/* Input Fields Group */}
-        <View style={styles.inputGroup}>
-          <StyledTextInput
-            placeholder="Year"
-            value={year}
-            onChangeText={setYear}
-            keyboardType="numeric"
-            maxLength={4}
-            style={styles.yearInput}
-          />
-          <StyledTextInput
-            placeholder="Month"
-            value={month}
-            onChangeText={setMonth}
-            keyboardType="numeric"
-            maxLength={2}
-            style={styles.monthInput}
-          />
-          <StyledTextInput
-            placeholder="Day"
-            value={day}
-            onChangeText={setDay}
-            keyboardType="numeric"
-            maxLength={2}
-            style={styles.dayInput}
-          />
-        </View>
+            {/* Input Fields Group */}
+            <View style={styles.inputGroup}>
+              <StyledTextInput
+                placeholder="Year"
+                value={answers.birthDateYear || ''}
+                onChangeText={(text) => updateAnswer('birthDateYear', text)}
+                keyboardType="numeric"
+                maxLength={4}
+                style={styles.yearInput}
+              />
+              <StyledTextInput
+                placeholder="Month"
+                value={answers.birthDateMonth || ''}
+                onChangeText={(text) => updateAnswer('birthDateMonth', text)}
+                keyboardType="numeric"
+                maxLength={2}
+                style={styles.monthInput}
+              />
+              <StyledTextInput
+                placeholder="Day"
+                value={answers.birthDateDay || ''}
+                onChangeText={(text) => updateAnswer('birthDateDay', text)}
+                keyboardType="numeric"
+                maxLength={2}
+                style={styles.dayInput}
+              />
+            </View>
 
-        {/* Continue Button */}
-        <View style={styles.buttonContainer}>
-          <PrimaryButton
-            title="Continue"
-            disabled={!year || !month || !day}
-            onPress={() => router.push('/(questionnaire)/height')}
-          />
-        </View>
-      </View>
+            {/* Continue Button */}
+            <View style={styles.buttonContainer}>
+              <PrimaryButton
+                title="Continue"
+                disabled={!answers.birthDateYear || !answers.birthDateMonth || !answers.birthDateDay}
+                onPress={() => router.push('/(questionnaire)/height')}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

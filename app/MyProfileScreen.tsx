@@ -3,14 +3,15 @@ import PillButton from '@/components/PillButton';
 import ProfileInputRow from '@/components/ProfileInputRow';
 import ScreenContainer from '@/components/ScreenContainer';
 import { Stack } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function MyProfileScreen() {
-  const [firstName, setFirstName] = useState<string>('');
-  const [birthdate, setBirthdate] = useState<string>('');
-  const [height, setHeight] = useState<string>('');
-  const [activeGender, setActiveGender] = useState<string | null>(null);
+  const { answers, updateAnswer } = useQuestionnaire();
+
+  // Format birthdate from Context
+  const birthdate = `${answers.birthDateYear || ''} / ${answers.birthDateMonth || ''} / ${answers.birthDateDay || ''}`;
 
   return (
     <>
@@ -35,22 +36,24 @@ export default function MyProfileScreen() {
           <ProfileInputRow
             label="First Name"
             placeholder="Enter your first name"
-            value={firstName}
-            onChangeText={setFirstName}
+            value="Sam"
+            onChangeText={() => {}}
           />
 
           <ProfileInputRow
             label="Birthdate"
             placeholder="e.g., June 4, 2007"
             value={birthdate}
-            onChangeText={setBirthdate}
+            onChangeText={() => {}}
+            editable={false}
           />
 
           <ProfileInputRow
             label="Height"
             placeholder="e.g., 178 cm"
-            value={height}
-            onChangeText={setHeight}
+            value={answers.height ? `${answers.height} cm` : ''}
+            onChangeText={() => {}}
+            editable={false}
           />
 
           {/* Bottom Section - Gender Selection */}
@@ -58,18 +61,18 @@ export default function MyProfileScreen() {
           <View style={styles.genderButtonsContainer}>
             <PillButton
               title="Male"
-              isActive={activeGender === 'male'}
-              onPress={() => setActiveGender('male')}
+              isActive={answers.gender === 'Male'}
+              onPress={() => updateAnswer('gender', 'Male')}
             />
             <PillButton
               title="Female"
-              isActive={activeGender === 'female'}
-              onPress={() => setActiveGender('female')}
+              isActive={answers.gender === 'Female'}
+              onPress={() => updateAnswer('gender', 'Female')}
             />
             <PillButton
               title="Non binary"
-              isActive={activeGender === 'nonbinary'}
-              onPress={() => setActiveGender('nonbinary')}
+              isActive={answers.gender === 'Non binary'}
+              onPress={() => updateAnswer('gender', 'Non binary')}
             />
           </View>
         </ScrollView>

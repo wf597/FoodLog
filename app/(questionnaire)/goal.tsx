@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+import { useQuestionnaire } from '@/context/QuestionnaireContext';
 
 export default function GoalScreen() {
-  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const { answers, updateAnswer } = useQuestionnaire();
 
   const goals = ['Losing Weight', 'Gaining muscle and losing fat', 'Eating healthier and maintain weight'];
 
@@ -21,7 +22,7 @@ export default function GoalScreen() {
           showsVerticalScrollIndicator={false}
         >
           {goals.map((item, index) => {
-            const isSelected = item === selectedGoal;
+            const isSelected = item === answers.goal;
             return (
               <TouchableOpacity
                 key={index}
@@ -29,7 +30,7 @@ export default function GoalScreen() {
                   styles.optionButton,
                   isSelected && styles.optionButtonSelected,
                 ]}
-                onPress={() => setSelectedGoal(item)}
+                onPress={() => updateAnswer('goal', item)}
               >
                 <Text
                   style={[
@@ -48,7 +49,7 @@ export default function GoalScreen() {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             title="Continue"
-            disabled={selectedGoal === null}
+            disabled={answers.goal === null}
             onPress={() => router.push('/(questionnaire)/gender')}
           />
         </View>
