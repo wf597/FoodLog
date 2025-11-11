@@ -6,8 +6,7 @@ import StyledTextInput from '@/components/StyledTextInput';
 import PrimaryButton from '@/components/PrimaryButton';
 import SocialLoginButton from '@/components/SocialLoginButton';
 
-export default function SignUpScreen() {
-  const [fullName, setFullName] = useState('');
+export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,17 +27,7 @@ export default function SignUpScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Title */}
-          <Text style={styles.title}>Create Your Account</Text>
-
-          {/* Full Name Input */}
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Full Name</Text>
-            <StyledTextInput
-              placeholder="Enter Full Name"
-              value={fullName}
-              onChangeText={setFullName}
-            />
-          </View>
+          <Text style={styles.title}>Log In</Text>
 
           {/* Email Input */}
           <View style={styles.inputContainer}>
@@ -74,14 +63,14 @@ export default function SignUpScreen() {
           <SocialLoginButton title="Continue with Google" iconName="logo-google" onPress={() => {}} />
           <SocialLoginButton title="Continue with Apple" iconName="logo-apple" onPress={() => {}} />
 
-          {/* Sign Up Button */}
+          {/* Log In Button */}
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Sign Up" onPress={() => router.push('/(questionnaire)/goal')} />
+            <PrimaryButton title="Log In" onPress={() => router.push('/(tabs)/home')} />
           </View>
 
-          {/* Log In Link */}
-          <TouchableOpacity onPress={() => router.push('/login')}>
-            <Text style={styles.loginText}>Already have an account? Log In</Text>
+          {/* Sign Up Link */}
+          <TouchableOpacity onPress={() => router.push('/signup')}>
+            <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
         </ScrollView>
       </ScreenContainer>
@@ -130,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     width: '100%',
   },
-  loginText: {
+  signupText: {
     textAlign: 'center',
     marginTop: 16,
     fontSize: 14,

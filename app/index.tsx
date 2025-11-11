@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
 
@@ -24,7 +24,9 @@ export default function OnboardingScreen() {
         />
 
         {/* Log In Link */}
-        <Text style={styles.loginText}>Already Have An Account? Log In</Text>
+        <TouchableOpacity onPress={() => router.push('/login')}>
+          <Text style={styles.loginText}>Already Have An Account? Log In</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
