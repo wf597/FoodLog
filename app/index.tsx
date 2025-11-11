@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/PrimaryButton';
+
+const { height: screenHeight } = Dimensions.get('window');
 
 export default function OnboardingScreen() {
   return (
@@ -9,8 +11,12 @@ export default function OnboardingScreen() {
       {/* Top Logo */}
       <Text style={styles.logo}>CalLens</Text>
 
-      {/* Middle Illustration Placeholder */}
-      <View style={styles.illustration} />
+      {/* Middle Illustration */}
+      <Image 
+        source={require('@/assets/images/Onboarding.jpg')} 
+        style={styles.illustration}
+        resizeMode="contain"
+      />
 
       {/* Bottom Content */}
       <View style={styles.bottomContent}>
@@ -45,9 +51,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   illustration: {
-    width: 250,
-    height: 250,
-    backgroundColor: '#F0F0F0',
+    width: '100%',
+    height: screenHeight * 0.5,
   },
   bottomContent: {
     alignItems: 'center',

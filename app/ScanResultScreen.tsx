@@ -17,48 +17,39 @@ import NutritionProgressCard from '@/components/NutritionProgressCard';
 import FoodItemCard from '@/components/FoodItemCard';
 import PrimaryButton from '@/components/PrimaryButton';
 import IconButton from '@/components/IconButton';
+import { useDailyFood, MealType } from '@/context/DailyFoodContext';
 
 // Mock data
 const MOCK_DATA = {
-  calories: '2,230 kcal',
+  calories: '190 kcal',
   macros: [
-    { title: 'Protein', value: '83%', progress: 0.83, color: '#28B446' },
+    { title: 'Protein', value: '83%', progress: 0.83, color: '#5ECD8B' },
     { title: 'Carbs', value: '50%', progress: 0.5, color: '#FCD269' },
     { title: 'Fat', value: '63%', progress: 0.63, color: '#FD8F6F' },
+    { title: 'Fibre', value: '10%', progress: 0.1, color: '#9D9D9D' },
   ],
   foodItems: [
     {
       id: '1',
-      title: 'Grilled Chicken Strips',
-      details: '220 kcal | Protein: 30g | Carbs: 0g | Fat: 5g',
-    },
-    {
-      id: '2',
-      title: 'Naan Bread',
-      details: '260 kcal | Protein: 7g | Carbs: 45g | Fat: 6g',
-    },
-    {
-      id: '3',
-      title: 'Sautéed Bell Peppers (Red & Yellow)',
-      details: '50 kcal | Protein: 1g | Carbs: 12g | Fat: 0.3g',
+      title: 'Avocado',
+      details: '190 kcal | Protein: 2g | Carbs: 11g | Fat: 18g | Fibre: 8g',
     },
   ],
 };
-
-type MealType = 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
 
 export default function ScanResultScreen() {
   const { imageUri } = useLocalSearchParams<{ imageUri: string }>();
   const [isLoading, setIsLoading] = useState(true);
   const [apiData, setApiData] = useState<typeof MOCK_DATA | null>(null);
   const [showMealModal, setShowMealModal] = useState(false);
+  const { addFoodToMeal } = useDailyFood();
 
   // Simulate API call
   useEffect(() => {
     setTimeout(() => {
       setApiData(MOCK_DATA);
       setIsLoading(false);
-    }, 2000);
+    }, 4000);
   }, []);
 
   const handleAddToDiet = () => {
@@ -69,11 +60,34 @@ export default function ScanResultScreen() {
     console.log(`Adding to ${mealType}`);
     setShowMealModal(false);
     
-    // TODO: Implement adding food to the selected meal
-    // Here you would typically:
-    // 1. Save the food data to a state management system (e.g., Zustand, Redux, Context)
-    // 2. Update the meal data for the selected meal type
-    // 3. Navigate to the home page to show the updated meal
+    // Add food to the selected meal
+    if (apiData && apiData.foodItems.length > 0) {
+      const foodItem = apiData.foodItems[0];
+      
+      // Extract nutrition values from details string
+      // Format: "190 kcal | Protein: 2g | Carbs: 11g | Fat: 18g | Fibre: 8g"
+      const extractValue = (str: string, label: string): number => {
+        const regex = new RegExp(`${label}:\\s*(\\d+(?:\\.\\d+)?)g`, 'i');
+        const match = str.match(regex);
+        return match ? parseFloat(match[1]) : 0;
+      };
+      
+      const calories = parseInt(apiData.calories.replace(' kcal', ''), 10) || 0;
+      const protein = extractValue(foodItem.details, 'Protein');
+      const carbs = extractValue(foodItem.details, 'Carbs');
+      const fat = extractValue(foodItem.details, 'Fat');
+      const fibre = extractValue(foodItem.details, 'Fibre');
+      
+      addFoodToMeal(mealType, {
+        id: foodItem.id,
+        title: foodItem.title,
+        calories,
+        protein,
+        carbs,
+        fat,
+        fibre,
+      });
+    }
     
     // Show success message
     Alert.alert('Success', `Food added to ${mealType}!`);
@@ -82,11 +96,10 @@ export default function ScanResultScreen() {
     // The correct approach in Expo Router:
     // Since ScanResultScreen is a Stack screen, we can use router.replace
     // to reset the navigation stack and go directly to the home tab
-    // The path '/(tabs)' will navigate to tabs, which defaults to the index (home) tab
     setTimeout(() => {
       // Replace the navigation stack to go directly to home tab
       // This clears ScanResultScreen from history and navigates to home
-      router.replace('/(tabs)' as any);
+      router.replace('/(tabs)/home');
     }, 500);
   };
 
@@ -108,7 +121,7 @@ export default function ScanResultScreen() {
         }}
       />
 
-      {/* Background Image */}
+      {/* Background Image - Covers all space except content card */}
       {imageUri ? (
         <ImageBackground
           source={{ uri: imageUri }}
@@ -147,7 +160,7 @@ export default function ScanResultScreen() {
         </View>
       )}
 
-      {/* White Content Card (Scrollable) */}
+      {/* White Content Card (Scrollable) - Overlays on top of image */}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -158,7 +171,7 @@ export default function ScanResultScreen() {
           </View>
         ) : isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#28B446" />
+            <ActivityIndicator size="large" color="#5ECD8B" />
             <Text style={styles.loadingText}>Analyzing your meal...</Text>
           </View>
         ) : (
@@ -268,13 +281,13 @@ export default function ScanResultScreen() {
 
 const styles = StyleSheet.create({
   imageBackground: {
-    height: '40%',
+    ...StyleSheet.absoluteFillObject,
     width: '100%',
-    position: 'relative',
+    height: '100%',
   },
   imageOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
   imagePlaceholder: {
     backgroundColor: '#E0E0E0',
@@ -326,15 +339,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   scrollView: {
-    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: 'white',
-    marginTop: -30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    maxHeight: '75%',
+    minHeight: '50%',
   },
   scrollContent: {
     padding: 20,
     paddingBottom: 40,
+    paddingTop: 20,
   },
   loadingContainer: {
     flex: 1,

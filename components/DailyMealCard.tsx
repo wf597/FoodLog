@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Card from './Card';
 import IconButton from './IconButton';
 
@@ -15,8 +15,12 @@ export default function DailyMealCard({ title, calories, onPressAdd }: DailyMeal
       <View style={styles.container}>
         {/* Left Section */}
         <View style={styles.leftSection}>
-          {/* Placeholder Icon */}
-          <View style={styles.iconPlaceholder} />
+          {/* Meal Image */}
+          <Image 
+            source={require('@/assets/images/dailymeal.jpg')} 
+            style={styles.mealImage}
+            resizeMode="cover"
+          />
           
           {/* Text Block */}
           <View style={styles.textBlock}>
@@ -47,11 +51,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  iconPlaceholder: {
+  mealImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#E0E0E0',
   },
   textBlock: {
     marginLeft: 12,

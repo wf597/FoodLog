@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { QuestionnaireProvider } from '@/context/QuestionnaireContext';
+import { DailyFoodProvider } from '@/context/DailyFoodContext';
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -51,15 +52,17 @@ function RootLayoutNav() {
 
   return (
     <QuestionnaireProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="MyProfileScreen" options={{ presentation: 'card', headerShown: true }} />
-          <Stack.Screen name="MyGoalsScreen" options={{ title: 'My Goals', presentation: 'card' }} />
-          <Stack.Screen name="ScanResultScreen" options={{ headerShown: false }} />
-          <Stack.Screen name="AddFoodScreen" options={{ headerShown: false }} />
-        </Stack>
-      </ThemeProvider>
+      <DailyFoodProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="MyProfileScreen" options={{ presentation: 'card', headerShown: true }} />
+            <Stack.Screen name="MyGoalsScreen" options={{ title: 'My Goals', presentation: 'card' }} />
+            <Stack.Screen name="ScanResultScreen" options={{ headerShown: false }} />
+            <Stack.Screen name="AddFoodScreen" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </DailyFoodProvider>
     </QuestionnaireProvider>
   );
 }

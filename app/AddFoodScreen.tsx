@@ -1,9 +1,10 @@
 import FoodSearchItem from '@/components/FoodSearchItem';
 import IconButton from '@/components/IconButton';
 import SearchBar from '@/components/SearchBar';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useDailyFood, MealType } from '@/context/DailyFoodContext';
 
 // Test data for search
 const searchResults = [
@@ -22,8 +23,18 @@ type FoodItem = {
 };
 
 export default function AddFoodScreen() {
+  const { mealType } = useLocalSearchParams<{ mealType?: string }>();
+  const currentMealType = (mealType as MealType) || 'Breakfast';
+  const { meals, addFoodToMeal, removeFoodFromMeal } = useDailyFood();
   const [searchText, setSearchText] = useState('');
-  const [mealFoods, setMealFoods] = useState<FoodItem[]>([]);
+  
+  // Get current meal's foods from context
+  const mealFoods = meals[currentMealType].foods.map(food => ({
+    id: food.id,
+    title: food.title,
+    subtitle: `${food.calories} Cal${food.protein ? ` | Protein: ${food.protein}g` : ''}${food.carbs ? ` | Carbs: ${food.carbs}g` : ''}${food.fat ? ` | Fat: ${food.fat}g` : ''}${food.fibre ? ` | Fibre: ${food.fibre}g` : ''}`,
+    type: 'other' as const,
+  }));
 
   // Extract calories from subtitle (e.g., "133 Cal, 1 mango (208 g)" -> 133)
   const extractCalories = (subtitle: string): number => {
@@ -31,25 +42,49 @@ export default function AddFoodScreen() {
     return match ? parseInt(match[1], 10) : 0;
   };
 
+  // Extract nutrition values from subtitle
+  const extractNutrition = (subtitle: string) => {
+    const extractValue = (label: string): number => {
+      const regex = new RegExp(`${label}:\\s*(\\d+(?:\\.\\d+)?)g`, 'i');
+      const match = subtitle.match(regex);
+      return match ? parseFloat(match[1]) : 0;
+    };
+    
+    return {
+      calories: extractCalories(subtitle),
+      protein: extractValue('Protein'),
+      carbs: extractValue('Carbs'),
+      fat: extractValue('Fat'),
+      fibre: extractValue('Fibre'),
+    };
+  };
+
   // Calculate total calories from added foods
-  const totalCalories = mealFoods.reduce((total, food) => {
-    return total + extractCalories(food.subtitle);
-  }, 0);
+  const totalCalories = meals[currentMealType].totalCalories;
 
   const goalCalories = 456; // Daily goal for this meal
 
   // Handle adding food from search results
   const handleAddFood = (id: string) => {
     const foodToAdd = searchResults.find((item) => item.id === id);
-    if (foodToAdd && !mealFoods.find((item) => item.id === id)) {
-      setMealFoods((prev) => [...prev, foodToAdd]);
+    if (foodToAdd) {
+      const nutrition = extractNutrition(foodToAdd.subtitle);
+      addFoodToMeal(currentMealType, {
+        id: foodToAdd.id,
+        title: foodToAdd.title,
+        calories: nutrition.calories,
+        protein: nutrition.protein,
+        carbs: nutrition.carbs,
+        fat: nutrition.fat,
+        fibre: nutrition.fibre,
+      });
       setSearchText(''); // Clear search after adding
     }
   };
 
   // Handle removing food from meal
   const handleRemoveFood = (id: string) => {
-    setMealFoods((prev) => prev.filter((item) => item.id !== id));
+    removeFoodFromMeal(currentMealType, id);
   };
 
   // Filter search results based on search text
@@ -75,7 +110,7 @@ export default function AddFoodScreen() {
             
             {/* Text Block */}
             <View style={styles.textBlock}>
-              <Text style={styles.breakfastTitle}>Breakfast</Text>
+              <Text style={styles.breakfastTitle}>{currentMealType}</Text>
               <Text style={styles.calories}>
                 {totalCalories} / {goalCalories} Cal
               </Text>
@@ -115,7 +150,7 @@ export default function AddFoodScreen() {
                     isAdded={isInMeal}
                     onPressAdd={() => handleAddFood(item.id)}
                     onPressRemove={() => handleRemoveFood(item.id)}
-                    showRemoveButton={!showSearchResults}
+                    showRemoveButton={!showSearchResults && isInMeal}
                   />
                 );
               }}
@@ -141,7 +176,7 @@ export default function AddFoodScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#28B446',
+    backgroundColor: '#5ECD8B',
   },
   safeArea: {
     flex: 1,

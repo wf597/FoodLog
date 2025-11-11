@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   optionButtonSelected: {
-    borderColor: '#28B446',
+    borderColor: '#5ECD8B',
     backgroundColor: '#F0F9F2',
   },
   optionText: {
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   optionTextSelected: {
-    color: '#28B446',
+    color: '#5ECD8B',
     fontWeight: '600',
   },
   buttonContainer: {

@@ -19,7 +19,7 @@ export default function SocialLoginButton({ title, iconName, onPress }: SocialLo
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#28B446',
+    backgroundColor: '#5ECD8B',
     borderRadius: 12,
     paddingVertical: 14,
     flexDirection: 'row',

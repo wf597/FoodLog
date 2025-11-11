@@ -22,7 +22,7 @@ export default function PrimaryButton({ onPress, title, disabled = false }: Prim
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#28B446',
+    backgroundColor: '#5ECD8B',
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,

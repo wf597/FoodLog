@@ -26,7 +26,7 @@ export default function FoodSearchItem({
   const getDotColor = () => {
     switch (type) {
       case 'fruit':
-        return '#28B446'; // Green
+        return '#5ECD8B'; // Green
       case 'fastfood':
         return '#FF4444'; // Red
       case 'other':
@@ -47,7 +47,7 @@ export default function FoodSearchItem({
             <Ionicons
               name="checkmark-circle"
               size={18}
-              color="#28B446"
+              color="#5ECD8B"
               style={styles.checkmark}
             />
           )}

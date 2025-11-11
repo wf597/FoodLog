@@ -13,7 +13,7 @@ export default function PillButton({ title, onPress, isActive }: PillButtonProps
       style={[
         styles.button,
         {
-          backgroundColor: isActive ? '#28B446' : '#F0F0F0',
+          backgroundColor: isActive ? '#5ECD8B' : '#F0F0F0',
         },
       ]}
       onPress={onPress}
