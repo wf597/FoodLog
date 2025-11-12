@@ -6,9 +6,9 @@ respectively in each branch.
 
 ## Prerequisites
 
--   Node.js \>= 18\
--   npm \>= 9 (or yarn)\
--   A MongoDB connection string (for backend)\
+-   Node.js \>= 18
+-   npm \>= 9 (or yarn)
+-   A MongoDB connection string (for backend
 -   Expo Go app on your phone (to run the mobile app)
 
 ## Frontend (React Native + Expo)
