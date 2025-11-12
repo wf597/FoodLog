@@ -23,8 +23,8 @@ git checkout frontend
 
 **Install dependencies**\
 **Start the app**\
-**Open on device**\
-- iOS: open Camera and scan the QR code\
+**Open on device**
+- iOS: open Camera and scan the QR code
 - Android: open Expo Go and scan the QR code
 
 ## Backend (Node.js + Express + MongoDB)
