@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Stack, router } from 'expo-router';
-import ScreenContainer from '@/components/ScreenContainer';
-import StyledTextInput from '@/components/StyledTextInput';
 import PrimaryButton from '@/components/PrimaryButton';
+import ScreenContainer from '@/components/ScreenContainer';
 import SocialLoginButton from '@/components/SocialLoginButton';
+import StyledTextInput from '@/components/StyledTextInput';
+import { Stack, router } from 'expo-router';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SignUpScreen() {
   const [fullName, setFullName] = useState('');
@@ -17,7 +17,6 @@ export default function SignUpScreen() {
         options={{
           headerTransparent: true,
           title: '',
-          headerBackTitleVisible: false,
           headerShadowVisible: false,
         }}
       />

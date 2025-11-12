@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import { CameraView, useCameraPermissions, CameraViewRef } from 'expo-camera';
-import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { router } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ScanScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [mode, setMode] = useState<'camera' | 'barcode' | 'gallery'>('camera');
-  const cameraRef = useRef<CameraViewRef>(null);
+  const cameraRef = useRef<CameraView>(null);
 
   useEffect(() => {
     if (permission && !permission.granted) {
@@ -36,7 +36,9 @@ export default function ScanScreen() {
   const takePicture = async () => {
     if (cameraRef.current) {
       try {
-        const photo = await cameraRef.current.takePictureAsync();
+        const photo = await (cameraRef.current as any).takePictureAsync({
+          quality: 1,
+        });
         console.log('Photo taken:', photo.uri);
         // Navigate to ScanResultScreen with the photo URI
         console.log('Navigating to ScanResultScreen with imageUri:', photo.uri);

@@ -11,7 +11,25 @@ export default function MyProfileScreen() {
   const { answers, updateAnswer } = useQuestionnaire();
 
   // Format birthdate from Context
-  const birthdate = `${answers.birthDateYear || ''} / ${answers.birthDateMonth || ''} / ${answers.birthDateDay || ''}`;
+  const formatBirthdate = () => {
+    if (!answers.birthDateYear || !answers.birthDateMonth || !answers.birthDateDay) {
+      return '';
+    }
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const month = parseInt(answers.birthDateMonth, 10);
+    const day = parseInt(answers.birthDateDay, 10);
+    const year = answers.birthDateYear;
+    
+    if (month >= 1 && month <= 12) {
+      return `${monthNames[month - 1]} ${day}, ${year}`;
+    }
+    return `${answers.birthDateMonth}/${answers.birthDateDay}/${year}`;
+  };
+
+  const birthdate = formatBirthdate();
 
   return (
     <>

@@ -1,10 +1,10 @@
 import FoodSearchItem from '@/components/FoodSearchItem';
 import IconButton from '@/components/IconButton';
 import SearchBar from '@/components/SearchBar';
+import { MealType, useDailyFood } from '@/context/DailyFoodContext';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useDailyFood, MealType } from '@/context/DailyFoodContext';
 
 // Test data for search
 const searchResults = [
@@ -96,7 +96,7 @@ export default function AddFoodScreen() {
 
   // Determine which list to show
   const showSearchResults = searchText.trim().length > 0;
-  const displayData = showSearchResults ? filteredSearchResults : mealFoods;
+  const displayData: FoodItem[] = showSearchResults ? filteredSearchResults : mealFoods;
 
   return (
     <View style={styles.root}>
